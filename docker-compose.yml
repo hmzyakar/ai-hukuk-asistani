@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Servisimize projemizle ilgili bir isim verelim
+  claude-hukuk-asistani:
+    # 'image' yerine 'build: .' diyoruz. Bu, Docker Compose'a bu klasördeki
+    # Dockerfile'ı kullanarak kendi imajımızı oluşturmasını söyler.
+    build: .
+    # Konteyner içindeki çalışma klasörünü /app olarak belirledik.
+    working_dir: /app
+    # Bu en önemli kısım. Bilgisayarımızdaki proje klasörünü (./) konteynerdeki
+    # /app klasörüne bağlıyoruz. Bu sayede bilgisayarımızda yaptığımız her kod
+    # değişikliği anında konteynerin içine yansır, sürekli build yapmamız gerekmez.
+    volumes:
+      - ./:/app
+    # Konteynerin interaktif bir terminal (bash) ile açık kalmasını sağlıyoruz.
+    command: bash
+    stdin_open: true # Bu iki satır, terminale yazı yazabilmemizi sağlar.
+    tty: true
