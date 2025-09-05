@@ -28,35 +28,26 @@ def fetch_regulation_links(gazette_url):
         
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Get all anchor tags on the page
-        all_anchors = soup.find_all('a')
+        # Find all div elements with class="fihrist-item"
+        fihrist_divs = soup.find_all('div', class_='fihrist-item')
         
-        # Extract date string from the URL (e.g., '20250905')
-        import re
-        date_match = re.search(r'(\d{8})\.htm', gazette_url)
-        if not date_match:
-            print("Could not extract date from gazette URL")
-            return []
+        # Create list to store final URLs
+        regulation_links = []
         
-        date_string = date_match.group(1)
-        
-        # Create list to store valid links
-        valid_links = []
-        
-        # Iterate through each anchor tag
-        for anchor in all_anchors:
-            href = anchor.get('href')
+        # Iterate through each fihrist-item div
+        for div in fihrist_divs:
+            # Find the first anchor tag inside this div
+            anchor = div.find('a')
             
-            # Apply filtering logic: href must exist, contain date string, and end with .htm
-            if href and date_string in href and href.endswith('.htm'):
-                # Convert to absolute URL
-                absolute_url = f"https://www.resmigazete.gov.tr/{href}"
+            if anchor:
+                # Get the href attribute
+                href = anchor.get('href')
                 
-                # Add to results list only if not already there (avoid duplicates)
-                if absolute_url not in valid_links:
-                    valid_links.append(absolute_url)
+                if href:
+                    # The href should be a full, absolute URL
+                    regulation_links.append(href)
         
-        return valid_links
+        return regulation_links
         
     except Exception as e:
         print(f"Error fetching regulation links: {e}")

@@ -22,7 +22,7 @@ The project follows a modular structure under the `src` directory.
 
 -   `src/scraper.py`:
     -   `get_todays_gazette_url()`: **Completed and tested.** Dynamically generates the URL for the current date.
-    -   `fetch_regulation_links(url)`: **In Progress - Refactoring link scraping logic.** Changing from container-based scraping to pattern-based filtering of all links.
+    -   `fetch_regulation_links(url)`: **In Progress - Refactoring link scraping logic.** Using correct CSS selectors (`div.fihrist-item a`) based on the modern HTML template.
     -   `fetch_text_from_url(url)`: **Completed and tested.** Extracts clean text from a given regulation link.
     -   **STATUS: In Progress - Refactoring link scraping logic.**
 
@@ -41,4 +41,4 @@ The project follows a modular structure under the `src` directory.
 
 ## 3. Current Task
 
-**Current Step:** Refactoring `src/scraper.py` link scraping logic to use pattern-based filtering instead of container-based scraping. The new approach will find all links on the page and filter them based on date and file extension patterns. After this, we will continue implementing the main workflow in `src/app.py`.
+**Current Step:** Refactoring `fetch_regulation_links` to use the correct CSS selectors (`div.fihrist-item a`) based on the modern HTML template of the website. After this, we will continue implementing the main workflow in `src/app.py`.
