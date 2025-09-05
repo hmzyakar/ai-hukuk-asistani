@@ -45,4 +45,26 @@ def fetch_regulation_links(gazette_url):
 def fetch_text_from_url(url):
     """Fetches the full, clean text content from a specific regulation's URL."""
     print(f"DEBUG: fetch_text_from_url called for {url}.")
-    return "Placeholder text for a regulation." # Placeholder
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        main_divs = soup.find_all('div', class_='RGT_MAIN')
+        if not main_divs:
+            print("No RGT_MAIN divs found")
+            return ""
+        
+        text_parts = []
+        for div in main_divs:
+            text = div.get_text(separator=' ', strip=True)
+            if text:
+                text_parts.append(text)
+        
+        return ' '.join(text_parts)
+        
+    except Exception as e:
+        print(f"Error fetching text from URL: {e}")
+        return ""

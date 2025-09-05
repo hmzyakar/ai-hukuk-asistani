@@ -297,3 +297,75 @@ Please replace the entire existing `fetch_regulation_links` function in `src/scr
 3.  Execute this test file using the command: `python test_runner.py`
 4.  Show me the full output of the execution.
 5.  After the test is complete, delete the temporary `test_runner.py` file.
+
+## Prompt 4: Extract Text Content from Regulation URL
+
+**Part A: Implementation**
+
+**File to Modify:** `src/scraper.py`
+
+**Function to Implement:** `fetch_text_from_url(url)`
+
+**Requirements:**
+1.  The function should accept a `url` (a string) as an argument.
+2.  Use `requests` and `BeautifulSoup` to get and parse the HTML content of the regulation page. Include error handling for the request.
+3.  Analyze the HTML structure of a typical regulation page on `resmigazete.gov.tr`. The main content is usually within `div` elements that have a `class` of `RGT_MAIN`. You need to find all text within these specific containers.
+4.  The extracted text will contain a lot of unwanted HTML tags and extra whitespace. Clean the text to produce a single, readable string. Using the `.get_text(separator=' ', strip=True)` method on the BeautifulSoup object is a good way to achieve this.
+5.  The function should return the cleaned text as a single string. If the page cannot be fetched or no text is found, it should return an empty string.
+
+**Your Task:**
+Please replace the entire existing `fetch_text_from_url` function in `src/scraper.py` with the new, fully implemented version.
+
+**Part B: Verification**
+
+1.  After modifying the function, create a temporary test file in the root directory (`/app`) named `test_runner.py`.
+2.  Populate `test_runner.py` with the following content. This test uses a mock HTML structure to verify the logic.
+    ```python
+    # test_runner.py
+    import sys
+    from unittest.mock import patch, Mock
+    sys.path.insert(0, './src')
+    from scraper import fetch_text_from_url
+
+    MOCK_HTML = """
+    <html>
+        <body>
+            <div class="header">IGNORE THIS</div>
+            <div class="RGT_MAIN">
+                <p>This is the first paragraph of the regulation.</p>
+                <p>This is the <strong>second</strong> paragraph.</p>
+            </div>
+            <div class="RGT_MAIN">
+                <p>This is a third paragraph in another main div.</p>
+            </div>
+            <div class="footer">IGNORE THIS TOO</div>
+        </body>
+    </html>
+    """
+    
+    @patch('requests.get')
+    def run_test(mock_get):
+        print("--- Running Verification Test ---")
+        
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.text = MOCK_HTML
+        mock_get.return_value = mock_response
+
+        text = fetch_text_from_url("http://fake-regulation-url.com")
+        
+        print(f"Extracted Text: '{text}'")
+        
+        expected_text = "This is the first paragraph of the regulation. This is the second paragraph. This is a third paragraph in another main div."
+        
+        if text == expected_text:
+            print("✅ Test PASSED: The function correctly extracted and cleaned the text.")
+        else:
+            print(f"❌ Test FAILED.")
+
+    if __name__ == "__main__":
+        run_test()
+    ```
+3.  Execute this test file using the command: `python test_runner.py`
+4.  Show me the full output of the execution.
+5.  After the test is complete, delete the temporary `test_runner.py` file.
