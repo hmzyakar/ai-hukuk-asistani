@@ -298,6 +298,72 @@ Please replace the entire existing `fetch_regulation_links` function in `src/scr
 4.  Show me the full output of the execution.
 5.  After the test is complete, delete the temporary `test_runner.py` file.
 
+## Prompt 5: Setup and Configure AI Model
+
+**Part A: Implementation**
+
+**File to Modify:** `src/analyzer.py`
+
+**Function to Implement:** `setup_ai_model()`
+
+**Requirements:**
+1.  The function should no longer be a placeholder.
+2.  It must use the `python-dotenv` library's `load_dotenv()` function to load variables from the `.env` file.
+3.  It must use `os.getenv()` to read the `GOOGLE_API_KEY` from the environment variables.
+4.  You need to add error handling: If the `GOOGLE_API_KEY` is not found or is empty, the function should raise a `ValueError` with a helpful message like "GOOGLE_API_KEY not found in .env file. Please check your setup."
+5.  If the key is found, it should use `google.generativeai.configure(api_key=...)` to set up the connection.
+6.  Finally, it should initialize and return the generative model instance using `genai.GenerativeModel('gemini-1.5-pro-latest')`.
+7.  Wrap the entire logic in a `try...except` block to catch any potential errors during model initialization and print a descriptive error message if one occurs, returning `None`.
+
+**Your Task:**
+Please replace the entire existing `setup_ai_model` function in `src/analyzer.py` with the new, fully implemented version.
+
+**Part B: Verification**
+
+1.  After modifying the function, create a temporary test file named `test_runner.py`.
+2.  Populate `test_runner.py` with the following content. This test will use mocking to simulate the presence and absence of an API key.
+    ```python
+    # test_runner.py
+    import sys
+    import os
+    from unittest.mock import patch
+    sys.path.insert(0, './src')
+    from analyzer import setup_ai_model
+
+    def run_tests():
+        print("--- Running Verification Tests ---")
+
+        # Test Case 1: API Key IS PRESENT
+        print("\n--- Test Case 1: API Key is present ---")
+        # We use patch.dict to temporarily set an environment variable
+        with patch.dict(os.environ, {"GOOGLE_API_KEY": "fake-api-key"}):
+            # We use another patch to prevent the model from making a real network call
+            with patch('google.generativeai.GenerativeModel') as mock_model:
+                model = setup_ai_model()
+                if model is not None:
+                    print("✅ Test PASSED: Model was initialized successfully when API key was found.")
+                else:
+                    print("❌ Test FAILED: Model was not initialized even though key was present.")
+
+        # Test Case 2: API Key IS MISSING
+        print("\n--- Test Case 2: API Key is missing ---")
+        # Ensure the key is not in the environment for this test
+        if "GOOGLE_API_KEY" in os.environ:
+            del os.environ["GOOGLE_API_KEY"]
+        
+        model = setup_ai_model()
+        if model is None:
+            print("✅ Test PASSED: Function correctly returned None when API key was missing.")
+        else:
+            print("❌ Test FAILED: Function should have returned None when key was missing.")
+
+    if __name__ == "__main__":
+        run_tests()
+    ```
+3.  Execute this test file using the command: `python test_runner.py`
+4.  Show me the full output of the execution.
+5.  After the test is complete, delete the temporary `test_runner.py` file.
+
 ## Prompt 4: Extract Text Content from Regulation URL
 
 **Part A: Implementation**
@@ -365,6 +431,72 @@ Please replace the entire existing `fetch_text_from_url` function in `src/scrape
 
     if __name__ == "__main__":
         run_test()
+    ```
+3.  Execute this test file using the command: `python test_runner.py`
+4.  Show me the full output of the execution.
+5.  After the test is complete, delete the temporary `test_runner.py` file.
+
+## Prompt 5: Setup and Configure AI Model
+
+**Part A: Implementation**
+
+**File to Modify:** `src/analyzer.py`
+
+**Function to Implement:** `setup_ai_model()`
+
+**Requirements:**
+1.  The function should no longer be a placeholder.
+2.  It must use the `python-dotenv` library's `load_dotenv()` function to load variables from the `.env` file.
+3.  It must use `os.getenv()` to read the `GOOGLE_API_KEY` from the environment variables.
+4.  You need to add error handling: If the `GOOGLE_API_KEY` is not found or is empty, the function should raise a `ValueError` with a helpful message like "GOOGLE_API_KEY not found in .env file. Please check your setup."
+5.  If the key is found, it should use `google.generativeai.configure(api_key=...)` to set up the connection.
+6.  Finally, it should initialize and return the generative model instance using `genai.GenerativeModel('gemini-1.5-pro-latest')`.
+7.  Wrap the entire logic in a `try...except` block to catch any potential errors during model initialization and print a descriptive error message if one occurs, returning `None`.
+
+**Your Task:**
+Please replace the entire existing `setup_ai_model` function in `src/analyzer.py` with the new, fully implemented version.
+
+**Part B: Verification**
+
+1.  After modifying the function, create a temporary test file named `test_runner.py`.
+2.  Populate `test_runner.py` with the following content. This test will use mocking to simulate the presence and absence of an API key.
+    ```python
+    # test_runner.py
+    import sys
+    import os
+    from unittest.mock import patch
+    sys.path.insert(0, './src')
+    from analyzer import setup_ai_model
+
+    def run_tests():
+        print("--- Running Verification Tests ---")
+
+        # Test Case 1: API Key IS PRESENT
+        print("\n--- Test Case 1: API Key is present ---")
+        # We use patch.dict to temporarily set an environment variable
+        with patch.dict(os.environ, {"GOOGLE_API_KEY": "fake-api-key"}):
+            # We use another patch to prevent the model from making a real network call
+            with patch('google.generativeai.GenerativeModel') as mock_model:
+                model = setup_ai_model()
+                if model is not None:
+                    print("✅ Test PASSED: Model was initialized successfully when API key was found.")
+                else:
+                    print("❌ Test FAILED: Model was not initialized even though key was present.")
+
+        # Test Case 2: API Key IS MISSING
+        print("\n--- Test Case 2: API Key is missing ---")
+        # Ensure the key is not in the environment for this test
+        if "GOOGLE_API_KEY" in os.environ:
+            del os.environ["GOOGLE_API_KEY"]
+        
+        model = setup_ai_model()
+        if model is None:
+            print("✅ Test PASSED: Function correctly returned None when API key was missing.")
+        else:
+            print("❌ Test FAILED: Function should have returned None when key was missing.")
+
+    if __name__ == "__main__":
+        run_tests()
     ```
 3.  Execute this test file using the command: `python test_runner.py`
 4.  Show me the full output of the execution.

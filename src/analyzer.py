@@ -7,14 +7,18 @@ import google.generativeai as genai
 def setup_ai_model():
     """Loads the API key and configures the Gemini model."""
     print("DEBUG: setup_ai_model called.")
-    load_dotenv()
+    
     try:
+        load_dotenv()
         api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
-            raise ValueError("GOOGLE_API_KEY not found in .env file.")
+        
+        if not api_key or api_key.strip() == "" or api_key.strip() == "PASTE_YOUR_API_KEY_HERE":
+            raise ValueError("GOOGLE_API_KEY not found in .env file. Please check your setup.")
+        
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-1.5-pro-latest')
         return model
+        
     except Exception as e:
         print(f"Error setting up AI model: {e}")
         return None
