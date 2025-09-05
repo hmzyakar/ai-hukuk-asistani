@@ -31,7 +31,10 @@ def fetch_regulation_links(gazette_url):
     driver = None
     
     try:
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Remote(
+            command_executor='http://localhost:4444/wd/hub',
+            options=chrome_options
+        )
         driver.get(gazette_url)
         
         # Wait for the target elements to be present
@@ -80,7 +83,10 @@ def fetch_text_from_url(url):
     driver = None
     
     try:
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Remote(
+            command_executor='http://localhost:4444/wd/hub',
+            options=chrome_options
+        )
         driver.get(url)
         
         # Wait for the content container to be present

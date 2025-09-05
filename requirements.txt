@@ -5,3 +5,4 @@ beautifulsoup4
 python-dotenv
 selenium
 chromedriver-autoinstaller
+urllib3==2.2.1 
