@@ -7,7 +7,12 @@ from datetime import datetime
 def get_todays_gazette_url():
     """Constructs the URL for today's Official Gazette."""
     print("DEBUG: get_todays_gazette_url called.")
-    return "https://www.resmigazete.gov.tr/eskiler/2025/09/05/20250905.htm" # Placeholder
+    today = datetime.now()
+    year = today.strftime("%Y")
+    month = today.strftime("%m")
+    day = today.strftime("%d")
+    url = f"https://www.resmigazete.gov.tr/eskiler/{year}/{month}/{year}{month}{day}.htm"
+    return url
 
 def fetch_regulation_links(gazette_url):
     """Fetches all the links to new regulations from the main gazette page."""

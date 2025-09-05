@@ -157,3 +157,64 @@ if st.button("Bugünün Gündemini Getir"):
 Step 3: Final Confirmation
 
 After creating all the files and their contents, please confirm by running the tree /F command and showing me the output.
+
+## Prompt 2: Implement and Verify Dynamic URL Generation
+
+**Part A: Implementation**
+
+**File to Modify:** `src/scraper.py`
+
+**Function to Implement:** `get_todays_gazette_url()`
+
+**Requirements:**
+1.  The function should no longer return a hardcoded placeholder URL.
+2.  It needs to dynamically generate the URL for the **current date**.
+3.  You must use the `datetime` class from Python's standard `datetime` library.
+4.  Get the current year, month, and day.
+5.  Format the date parts into the required string format for the URL. The structure is: `https://www.resmigazete.gov.tr/eskiler/YYYY/MM/YYYYMMDD.htm`
+6.  Construct and return the final URL as a string.
+
+**Example:**
+If the current date is September 5, 2025, the function must return the exact string: "https://www.resmigazete.gov.tr/eskiler/2025/09/20250905.htm"
+
+**Your Task:**
+Please replace the entire existing `get_todays_gazette_url` function in `src/scraper.py` with the new, fully implemented version. Do not modify the other functions in the file yet.
+
+**Part B: Verification**
+
+1.  After modifying the function, create a temporary test file in the root directory (`/app`) named `test_runner.py`.
+2.  Populate `test_runner.py` with the following content:
+    ```python
+    # test_runner.py
+    import sys
+    # Add the 'src' directory to the Python path to allow imports
+    sys.path.insert(0, './src')
+    
+    from scraper import get_todays_gazette_url
+    from datetime import datetime
+
+    print("--- Running Verification Test ---")
+    
+    # Generate the expected URL manually for today's date
+    today = datetime.now()
+    year = today.strftime("%Y")
+    month = today.strftime("%m")
+    day = today.strftime("%d")
+    expected_url = f"[https://www.resmigazete.gov.tr/eskiler/](https://www.resmigazete.gov.tr/eskiler/){year}/{month}/{year}{month}{day}.htm"
+
+    # Call the function from the scraper module
+    generated_url = get_todays_gazette_url()
+    
+    print(f"Expected URL: {expected_url}")
+    print(f"Generated URL: {generated_url}")
+
+    # Simple check
+    if generated_url == expected_url:
+        print("✅ Test PASSED: The function returned the correct URL.")
+    else:
+        print("❌ Test FAILED.")
+
+    ```
+3.  Execute this test file using the command: `python test_runner.py`
+4.  Show me the full output of the execution.
+5.  After the test is complete and you have shown the output, delete the temporary `test_runner.py` file to keep the project directory clean.
