@@ -24,7 +24,7 @@ The project follows a modular structure under the `src` directory.
     -   `get_todays_gazette_url()`: **Completed and tested.** Dynamically generates the URL for the current date.
     -   `fetch_regulation_links(url)`: **Completed and tested.** Scrapes all regulation links from the given URL.
     -   `fetch_text_from_url(url)`: **Completed and tested.** Extracts clean text from a given regulation link.
-    -   **STATUS: Development of this module is complete.**
+    -   **STATUS: Refactoring to add User-Agent headers to all requests to avoid being blocked.**
 
 -   `src/analyzer.py`:
     -   `setup_ai_model()`: **Completed and tested.** Reads the Google API key from the `.env` file and configures the Gemini model.
@@ -41,4 +41,4 @@ The project follows a modular structure under the `src` directory.
 
 ## 3. Current Task
 
-**Final MVP Step:** Implementing the main workflow in `src/app.py`. This involves connecting the `scraper` and `analyzer` modules to create a complete end-to-end application that can scrape, analyze, and display Turkish legal regulations from the Official Gazette. Once complete, the MVP will be fully functional.
+**Current Step:** Refactoring `src/scraper.py` to add User-Agent headers to avoid bot detection. After this, we will continue implementing the main workflow in `src/app.py`.

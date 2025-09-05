@@ -4,6 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+}
+
 def get_todays_gazette_url():
     """Constructs the URL for today's Official Gazette."""
     print("DEBUG: get_todays_gazette_url called.")
@@ -19,7 +23,7 @@ def fetch_regulation_links(gazette_url):
     print(f"DEBUG: fetch_regulation_links called for {gazette_url}.")
     
     try:
-        response = requests.get(gazette_url)
+        response = requests.get(gazette_url, headers=HEADERS)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -47,7 +51,7 @@ def fetch_text_from_url(url):
     print(f"DEBUG: fetch_text_from_url called for {url}.")
     
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=HEADERS)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
