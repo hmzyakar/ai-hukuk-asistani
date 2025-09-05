@@ -32,13 +32,13 @@ The project follows a modular structure under the `src` directory.
     -   **STATUS: Development of this module is complete.**
 
 -   `src/app.py`:
-    -   **STATUS:** The basic UI skeleton and buttons are in place. The main workflow that calls functions from the `scraper` and `analyzer` modules is not yet fully implemented. This is our final task.
+    -   **STATUS: In Progress.** The basic UI skeleton and buttons are in place. Currently implementing the main workflow that calls functions from the `scraper` and `analyzer` modules.
 
 -   `requirements.txt`, `.gitignore`, `.env`:
     -   **STATUS:** Created and populated with all necessary content.
 
 ---
 
-## 3. Next Task
+## 3. Current Task
 
-Our current focus is to implement the main workflow in `src/app.py`. This involves connecting the `scraper` and `analyzer` modules and displaying the final results in the user interface.
+**Final MVP Step:** Implementing the main workflow in `src/app.py`. This involves connecting the `scraper` and `analyzer` modules to create a complete end-to-end application that can scrape, analyze, and display Turkish legal regulations from the Official Gazette. Once complete, the MVP will be fully functional.
