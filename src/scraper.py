@@ -23,7 +23,7 @@ def fetch_regulation_links(gazette_url):
     print(f"DEBUG: fetch_regulation_links called for {gazette_url}.")
     
     try:
-        response = requests.get(gazette_url, headers=HEADERS)
+        response = requests.get(gazette_url, headers=HEADERS, timeout=10)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -51,7 +51,7 @@ def fetch_text_from_url(url):
     print(f"DEBUG: fetch_text_from_url called for {url}.")
     
     try:
-        response = requests.get(url, headers=HEADERS)
+        response = requests.get(url, headers=HEADERS, timeout=10)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
