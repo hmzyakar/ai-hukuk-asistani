@@ -28,19 +28,35 @@ def fetch_regulation_links(gazette_url):
         
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        container = soup.find('div', class_='container-rgs')
-        if not container:
-            print("No container-rgs div found")
+        # Get all anchor tags on the page
+        all_anchors = soup.find_all('a')
+        
+        # Extract date string from the URL (e.g., '20250905')
+        import re
+        date_match = re.search(r'(\d{8})\.htm', gazette_url)
+        if not date_match:
+            print("Could not extract date from gazette URL")
             return []
         
-        links = []
-        for link in container.find_all('a', href=True):
-            href = link['href']
-            if href:
-                absolute_url = f"https://www.resmigazete.gov.tr/{href}"
-                links.append(absolute_url)
+        date_string = date_match.group(1)
         
-        return links
+        # Create list to store valid links
+        valid_links = []
+        
+        # Iterate through each anchor tag
+        for anchor in all_anchors:
+            href = anchor.get('href')
+            
+            # Apply filtering logic: href must exist, contain date string, and end with .htm
+            if href and date_string in href and href.endswith('.htm'):
+                # Convert to absolute URL
+                absolute_url = f"https://www.resmigazete.gov.tr/{href}"
+                
+                # Add to results list only if not already there (avoid duplicates)
+                if absolute_url not in valid_links:
+                    valid_links.append(absolute_url)
+        
+        return valid_links
         
     except Exception as e:
         print(f"Error fetching regulation links: {e}")

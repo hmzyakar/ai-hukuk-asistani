@@ -24,6 +24,8 @@ if st.button("Bugünün Gündemini Getir"):
             if not gazette_url:
                 st.error("Bugünkü Resmî Gazete URL'i oluşturulamadı.")
                 st.stop()
+
+        st.info(f"Scraping this URL for links: {gazette_url}")
         
         # Step 2: Fetch regulation links from the gazette page
         with st.spinner("Düzenleme linkler aranıyor..."):
