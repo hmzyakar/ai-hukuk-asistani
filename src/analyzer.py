@@ -26,7 +26,54 @@ def setup_ai_model():
 def summarize_and_categorize_text(model, text_content):
     """Takes a chunk of legal text and uses the AI model to summarize and categorize it."""
     print("DEBUG: summarize_and_categorize_text called.")
-    # TODO: Implement the expert legal prompt here.
-    summary = "This is a placeholder summary."
-    category = "Placeholder Category"
-    return category, summary
+    
+    try:
+        # Define the structured prompt for the Gemini model
+        prompt = f"""
+Sen Türk hukuku uzmanı bir avukatsın. Aşağıda verilen yasal metni analiz etmen gerekiyor.
+
+Görevlerin:
+1. Bu yasal metni uygun bir hukuk dalına kategorize et (örneğin: "Vergi Hukuku", "Ticaret Hukuku", "İcra ve İflas Hukuku", "İş Hukuku", "Medeni Hukuk", "Ceza Hukuku", vb.)
+2. Bu düzenlemenin ne değiştirdiğini ve kimleri etkilediğini açıklayan tek paragraflık, sade bir özet yaz.
+
+Lütfen cevabını tam olarak şu formatta ver:
+
+Kategori: [Hukuk Dalı]
+---
+Özet: [Bir paragraflık özet metni]
+
+Analiz edilecek yasal metin:
+{text_content}
+"""
+
+        # Send the prompt to the Gemini model
+        response = model.generate_content(prompt)
+        
+        # Extract the response text
+        response_text = response.text.strip()
+        
+        # Parse the response to extract category and summary
+        parts = response_text.split("---")
+        if len(parts) >= 2:
+            category_line = parts[0].strip()
+            summary_text = parts[1].strip()
+            
+            # Extract category (remove "Kategori:" prefix)
+            if category_line.startswith("Kategori:"):
+                category = category_line.replace("Kategori:", "").strip()
+            else:
+                category = "Belirsiz"
+            
+            # Extract summary (remove "Özet:" prefix if present)
+            if summary_text.startswith("Özet:"):
+                summary = summary_text.replace("Özet:", "").strip()
+            else:
+                summary = summary_text
+            
+            return category, summary
+        else:
+            return "Belirsiz", "Analiz tamamlanamadı"
+            
+    except Exception as e:
+        print(f"Error during text analysis: {e}")
+        return "Error", "Analysis failed"
