@@ -22,9 +22,9 @@ The project follows a modular structure under the `src` directory.
 
 -   `src/scraper.py`:
     -   `get_todays_gazette_url()`: **Completed and tested.** Dynamically generates the URL for the current date.
-    -   `fetch_regulation_links(url)`: **In Progress - Refactoring link scraping logic.** Using correct CSS selectors (`div.fihrist-item a`) based on the modern HTML template.
+    -   `fetch_regulation_links(url)`: **In Progress - Debugging by saving raw HTML output.** Adding debug code to save HTML content for analysis.
     -   `fetch_text_from_url(url)`: **Completed and tested.** Extracts clean text from a given regulation link.
-    -   **STATUS: In Progress - Refactoring link scraping logic.**
+    -   **STATUS: In Progress - Debugging `fetch_regulation_links` by saving raw HTML output.**
 
 -   `src/analyzer.py`:
     -   `setup_ai_model()`: **Completed and tested.** Reads the Google API key from the `.env` file and configures the Gemini model.
@@ -41,4 +41,4 @@ The project follows a modular structure under the `src` directory.
 
 ## 3. Current Task
 
-**Current Step:** Refactoring `fetch_regulation_links` to use the correct CSS selectors (`div.fihrist-item a`) based on the modern HTML template of the website. After this, we will continue implementing the main workflow in `src/app.py`.
+**Next Task:** Refactoring the entire `scraper.py` module to use Selenium WebDriver for robust, JavaScript-aware scraping. Replacing all `requests` calls.

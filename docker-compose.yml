@@ -1,5 +1,7 @@
 services:
   claude-hukuk-asistani:
+    # Bu satır, konteynerin adını her zaman sabit tutar.
+    container_name: ai-hukuk-asistani-dev
     build: .
     ports:
       - "8501:8501"
