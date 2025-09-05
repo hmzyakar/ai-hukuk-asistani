@@ -17,7 +17,30 @@ def get_todays_gazette_url():
 def fetch_regulation_links(gazette_url):
     """Fetches all the links to new regulations from the main gazette page."""
     print(f"DEBUG: fetch_regulation_links called for {gazette_url}.")
-    return [] # Placeholder
+    
+    try:
+        response = requests.get(gazette_url)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        container = soup.find('div', class_='container-rgs')
+        if not container:
+            print("No container-rgs div found")
+            return []
+        
+        links = []
+        for link in container.find_all('a', href=True):
+            href = link['href']
+            if href:
+                absolute_url = f"https://www.resmigazete.gov.tr/{href}"
+                links.append(absolute_url)
+        
+        return links
+        
+    except Exception as e:
+        print(f"Error fetching regulation links: {e}")
+        return []
 
 def fetch_text_from_url(url):
     """Fetches the full, clean text content from a specific regulation's URL."""

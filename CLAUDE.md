@@ -218,3 +218,82 @@ Please replace the entire existing `get_todays_gazette_url` function in `src/scr
 3.  Execute this test file using the command: `python test_runner.py`
 4.  Show me the full output of the execution.
 5.  After the test is complete and you have shown the output, delete the temporary `test_runner.py` file to keep the project directory clean.
+
+## Prompt 3: Scrape Regulation Links from Gazette Page
+
+**Part A: Implementation**
+
+**File to Modify:** `src/scraper.py`
+
+**Function to Implement:** `fetch_regulation_links(gazette_url)`
+
+**Requirements:**
+1.  The function should accept `gazette_url` (a string) as an argument.
+2.  Use the `requests` library to get the HTML content of the provided URL. You should include a `try...except` block to gracefully handle potential connection errors. If an error occurs, print an error message and return an empty list.
+3.  Use the `BeautifulSoup` library to parse the fetched HTML content.
+4.  Find all hyperlink (`<a>`) tags that point to individual regulations. Based on the website's structure, these links are typically found within a `div` element with the class `container-rgs`. You should find all `<a>` tags within this specific container.
+5.  The extracted `href` attributes will be relative URLs (e.g., `eskiler/2025/09/20250905-1.htm`). You must convert them into absolute URLs by prepending the base URL `https://www.resmigazete.gov.tr/`.
+6.  The function should return a list of these complete, absolute URLs. If no links are found, it should return an empty list.
+
+**Your Task:**
+Please replace the entire existing `fetch_regulation_links` function in `src/scraper.py` with the new, fully implemented version. Do not modify the other functions in the file yet.
+
+**Part B: Verification**
+
+1.  After modifying the function, create a temporary test file in the root directory (`/app`) named `test_runner.py`.
+2.  Populate `test_runner.py` with the following content. This test uses a mock HTML structure to verify the logic without needing an internet connection.
+    ```python
+    # test_runner.py
+    import sys
+    from unittest.mock import patch, Mock
+    sys.path.insert(0, './src')
+    from scraper import fetch_regulation_links
+
+    # Mock HTML content that mimics the real website's structure
+    MOCK_HTML = """
+    <html>
+        <body>
+            <div class="container-rgs">
+                <a href="eskiler/2025/09/20250905-1.htm">Regulation 1</a>
+                <a href="eskiler/2025/09/20250905-2.htm">Regulation 2</a>
+                <span>This is not a link</span>
+            </div>
+            <a href="some_other_link.htm">This link should be ignored</a>
+        </body>
+    </html>
+    """
+    
+    # This mock function will replace the real `requests.get`
+    @patch('requests.get')
+    def run_test(mock_get):
+        print("--- Running Verification Test ---")
+        
+        # Configure the mock to return our fake HTML
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.text = MOCK_HTML
+        mock_get.return_value = mock_response
+
+        # Call the real function we want to test
+        test_url = "http://fake-url.com"
+        links = fetch_regulation_links(test_url)
+        
+        print(f"Found links: {links}")
+        
+        # Verification checks
+        expected_links = [
+            "https://www.resmigazete.gov.tr/eskiler/2025/09/20250905-1.htm",
+            "https://www.resmigazete.gov.tr/eskiler/2025/09/20250905-2.htm"
+        ]
+        
+        if links == expected_links:
+            print("✅ Test PASSED: The function correctly extracted and formatted the URLs.")
+        else:
+            print(f"❌ Test FAILED. Expected {expected_links}, but got {links}")
+
+    if __name__ == "__main__":
+        run_test()
+    ```
+3.  Execute this test file using the command: `python test_runner.py`
+4.  Show me the full output of the execution.
+5.  After the test is complete, delete the temporary `test_runner.py` file.
